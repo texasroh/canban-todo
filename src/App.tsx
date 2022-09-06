@@ -1,4 +1,9 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable,
+    DropResult,
+} from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
@@ -36,8 +41,14 @@ const Card = styled.div`
 
 function App() {
     const [toDos, setToDos] = useRecoilState(toDoState);
-    const onDragEnd = (args: any) => {
-        console.log(args);
+    const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+        if (!destination) return;
+        setToDos((oldToDos) => {
+            const toDosCopy = [...oldToDos];
+            toDosCopy.splice(source.index, 1);
+            toDosCopy.splice(destination?.index, 0, draggableId);
+            return toDosCopy;
+        });
     };
     return (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -51,7 +62,7 @@ function App() {
                             >
                                 {toDos.map((toDo, index) => (
                                     <Draggable
-                                        key={index}
+                                        key={toDo}
                                         draggableId={toDo}
                                         index={index}
                                     >
