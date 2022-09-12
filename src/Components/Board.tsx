@@ -2,7 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { ITodo, toDoState } from "../atoms";
+import { ITodo, IToDoState, toDoState } from "../atoms";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.div`
@@ -16,11 +16,23 @@ const Wrapper = styled.div`
     overflow: hidden;
 `;
 
+const Header = styled.div`
+    display: flex;
+    padding: 0 20px;
+    align-items: baseline;
+    justify-content: space-between;
+`;
+
 const Title = styled.div`
-    text-align: center;
     font-weight: 600;
     margin-bottom: 10px;
     font-size: 10px;
+`;
+
+const Button = styled.button`
+    border: none;
+    background: transparent;
+    cursor: pointer;
 `;
 
 interface IAreaProps {
@@ -73,9 +85,26 @@ function Board({ toDos, boardId }: IBoardProps) {
         setValue("toDo", "");
     };
 
+    const deleteBoard = (boardId: IBoardProps["boardId"]) => {
+        setToDos((allBoards) => {
+            const tmp: IToDoState = {};
+            for (let key in allBoards) {
+                if (key === boardId) {
+                    continue;
+                }
+                tmp[key] = allBoards[key];
+            }
+            return tmp;
+        });
+    };
+
     return (
         <Wrapper>
-            <Title>{boardId}</Title>
+            <Header>
+                <div></div>
+                <Title>{boardId}</Title>
+                <Button onClick={() => deleteBoard(boardId)}>❌</Button>
+            </Header>
             <Form onSubmit={handleSubmit(onValid)}>
                 <input
                     {...register("toDo", { required: true })}
