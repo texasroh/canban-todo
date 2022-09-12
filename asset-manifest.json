@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/canban-todo/static/js/main.0675c3b0.js",
+    "index.html": "/canban-todo/index.html",
+    "main.0675c3b0.js.map": "/canban-todo/static/js/main.0675c3b0.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.0675c3b0.js"
+  ]
+}
